@@ -1,0 +1,160 @@
+#def recaman_item(n):
+#    # TOO SLOW   STOP AROUND n=60169  Case #56
+#    print(n)
+#    recaman_series = []
+#    prev_term = 1
+#    recaman_series.append(prev_term)
+#    for iter in range(2, n + 1):
+#        if prev_term - iter > 0 and (prev_term - iter) not in recaman_series:
+#            current_term = prev_term - iter
+#        else:
+#            current_term = prev_term + iter
+#        recaman_series.append(current_term)
+#        prev_term = current_term
+#    return recaman_series[n - 1]
+
+
+
+def crag_score(dice):  #GAVE UP
+    # https://en.wikipedia.org/wiki/Crag_(dice_game)  Score table
+    count = [0] * 6
+    totalpips = [0] * 6
+    total = 0
+    dice_sum = sum(dice)
+    score = 0
+    for i in range(3):
+        count[dice[i] - 1] += 1
+        totalpips[dice[i] - 1] += dice[i]
+        total += dice[i]
+        if (count[0] == 1 and count[5] == 2) or (count[2] == 1 and count[4] == 2) or (count[4] == 1 and count[3] == 2):
+            score = 50  # Crag points, 2 pair + 1 = 13 on dice
+        elif totalpips == 13:
+            score = 26  # total 13
+        elif count[0] == 3 or count[1] == 3 or count[2] == 3 or count[3] == 3 or count[4] == 3 or count[5] == 3:
+            score = 25  # 3 of a kind
+        elif count[3] == 1 and count[4] == 1 and count[5] == 1:
+            score = 20  # low straight
+        elif count[0] == 1 and count[1] == 1 and count[2] == 1:
+            score = 20  # high straight
+        elif count[1] == 1 and count[3] == 1 and count[5] == 1:
+            score = 20  # odd straight
+        elif count[0] == 1 and count[2] == 1 and count[4] == 1:
+            score = 20  # even straight
+        else:
+            for x in range(6):
+                if score < totalpips[x]:
+                    score = totalpips[x]
+    return score
+"""
+
+
+
+
+
+
+def crag_score(dice):
+    dice_sum = sum(dice)
+    tempscore=0
+    score = 0
+    if dice[0] == dice[1] and dice[0] == dice[2]:  # 3 of a kind
+        if 25 > score: score = 25
+    if dice[0] == dice[1] or dice[0] == dice[2] or dice[1] == dice[2]:  # crag
+        if dice_sum == 13:
+            score = 50
+    if (dice[0] == 3 and dice[1]==3) or (dice[1]==3 and dice[2]==3) or (dice[0]==3 and dice[2]==3) or (dice[0]==3) or dice[1]==3 or dice[2]==3: #3's
+        for x in dice:
+            if x == 3:
+                tempscore=+3
+        if tempscore>score:score=tempscore
+    if (dice[0] == 1 and dice[1]==1) or (dice[1]==1 and dice[2]==1) or (dice[0]==1 and dice[2]==1) or (dice[0]==1) or dice[1]==1 or dice[2]==1: #1's
+        if 2>score:score=2
+    return score
+	
+	
+	
+	
+	
+	def stop(l):  # WORKS BUT NEEDS TO BE UPDATED
+    for i in l:
+        if i >= 2:
+            return False
+    return True
+
+def candy_share(candies):
+    n = len(candies)
+    c = 0
+    while True:
+        if stop(candies):
+            return c
+        c += 1
+        new_candies = [0] * n
+        for i in range(n):
+            if candies[i] >= 2:
+                candies[i] -= 2
+                if i == n - 1:
+                    new_candies[i - 1] += 1
+                    new_candies[0] += 1
+                else:
+                    new_candies[i - 1] += 1
+                    new_candies[i + 1] += 1
+            new_candies[i] += candies[i]
+        candies = new_candies
+		
+		
+		
+def nearest_smaller(items):  #EDIT DOESNT FULLY WORK
+    result = []
+    curr_ele_index = 0
+    while len(result) < len(items):
+        smallest_ele_left = 'x'
+        smallest_ele_right = 'x'
+        left_index = curr_ele_index - 1
+        while left_index >= 0:
+            if (items[left_index] < items[curr_ele_index]):
+                smallest_ele_left = left_index
+                break
+            left_index -= 1
+        right_index = curr_ele_index + 1
+        while right_index < len(items):
+            if (items[right_index] < items[curr_ele_index]):
+                smallest_ele_right = right_index
+                break
+            right_index += 1
+        if smallest_ele_left == 'x':
+            if smallest_ele_right == 'x':
+                result.append(items[curr_ele_index])
+            else:
+                result.append(items[smallest_ele_right])
+        else:
+            if smallest_ele_right == 'x':
+                result.append(items[smallest_ele_left])
+            else:
+                dist_left = curr_ele_index - smallest_ele_left
+            dist_right = smallest_ele_right - curr_ele_index
+
+            if (dist_left < dist_right):
+                result.append(items[smallest_ele_left])
+
+            elif (dist_right < dist_left):
+                result.append(items[smallest_ele_right])
+            else:
+                smaller_ele = min(items[smallest_ele_left], items[smallest_ele_right])
+                result.append(smaller_ele)
+    curr_ele_index += 1
+    return result
+	
+	
+def count_consecutive_summers(n):  #EDIT AND WORKS BUT SLOW CODE
+  print(n)  
+  count = 0
+  for i in range(1, n+1):
+    total = 0
+    for j in range(i, n+1):
+      total += j
+      if total == n:
+        count += 1
+  return count
+  
+  
+  
+  
